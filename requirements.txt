@@ -1,0 +1,7 @@
+anthropic
+mcp
+fastapi
+uvicorn
+aiofiles
+python-dotenv
+requests
