@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 
 from logger import log_investigation_step
 
-MALWARE_KEYWORDS = ["mimikatz","psexec","meterpreter","nc.exe","ncat","cobalt","beacon"]
+MALWARE_KEYWORDS = ["mimikatz","psexec","meterpreter","nc.exe","ncat","cobalt","beacon","empire"]
 C2_PORTS = [4444, 4445, 1337, 31337, 8888, 9999, 6666]
 PERSIST_PATTERNS = ["CurrentVersion\\Run","CurrentVersion\\RunOnce","Winlogon","AppInit_DLLs"]
 
@@ -35,7 +35,8 @@ class InvestigationEngine:
         self.evidence["processes"] = procs
         self.evidence["network"] = nets
         log_investigation_step("PHASE1_DONE",
-            f"{procs.get('flag_count',0)} suspicious procs, {nets.get('flag_count',0)} C2 connections")
+            f"{procs.get('flag_count',0)} suspicious procs, "
+            f"{nets.get('flag_count',0)} C2 connections")
 
     async def _phase2_process_deep_dive(self, image_path: str):
         log_investigation_step("PHASE2_PROCESS", "deep dive triggered")
@@ -68,19 +69,36 @@ class InvestigationEngine:
         )
         self.evidence["mft"] = mft
         self.evidence["prefetch"] = prefetch
-        mem_names = {p["name"] for p in self.evidence.get("processes",{}).get("processes",[])}
-        disk_names = {e["name"] for e in prefetch.get("executables",[])}
+
+        # Get process NAMES from memory
+        mem_procs = self.evidence.get("processes", {}).get("processes", [])
+        mem_names = {p["name"].lower() for p in mem_procs if p.get("name")}
+
+        # Get executable NAMES from disk (prefetch)
+        disk_exes = prefetch.get("executables", [])
+        disk_names = {e["name"].lower() for e in disk_exes if e.get("name")}
+
+        # Ghost processes = in memory but NOT on disk
+        # Only flag if name looks suspicious or unknown
         memory_only = mem_names - disk_names
+
         self.evidence["cross_validation"] = {
-            "memory_only": list(memory_only),
-            "disk_only": list(disk_names - mem_names),
-            "consistent": list(mem_names & disk_names),
+            "memory_only_names": list(memory_only),
+            "disk_only_names": list(disk_names - mem_names),
+            "consistent_names": list(mem_names & disk_names),
             "anomaly_count": len(memory_only)
         }
+
         for name in memory_only:
-            self.iocs.append({"type":"GHOST_PROCESS","value":name,
-                "confidence":"HIGH","note":"Running in memory, no disk trace"})
-        log_investigation_step("PHASE3_DONE", f"{len(memory_only)} ghost processes found")
+            self.iocs.append({
+                "type": "GHOST_PROCESS",
+                "value": name,
+                "confidence": "HIGH",
+                "note": "Process name in memory, no matching disk executable found"
+            })
+
+        log_investigation_step("PHASE3_DONE",
+            f"{len(memory_only)} ghost process names detected")
 
     def _has_suspicious_processes(self):
         return len(self.evidence.get("processes",{}).get("flagged",[])) > 0
@@ -93,11 +111,15 @@ class InvestigationEngine:
         for entry in self.evidence.get("mft",{}).get("timeline",[]):
             ts = entry.get("timestamp")
             if ts and ts != "UNKNOWN":
-                events.append({"time":ts,"source":"DISK_MFT","event":entry.get("description","")})
+                events.append({"time":ts,"source":"DISK_MFT",
+                    "event":entry.get("description","")})
         for proc in self.evidence.get("processes",{}).get("flagged",[]):
-            events.append({"time":proc.get("create_time","UNKNOWN"),"source":"MEMORY",
+            events.append({"time":proc.get("create_time","UNKNOWN"),
+                "source":"MEMORY",
                 "event":f"Malicious process: {proc['name']} PID {proc['pid']}"})
-        self.timeline = sorted([e for e in events if e["time"]!="UNKNOWN"], key=lambda x: x["time"])
+        self.timeline = sorted(
+            [e for e in events if e["time"]!="UNKNOWN"],
+            key=lambda x: x["time"])
 
     def _compile_evidence_package(self):
         return {
@@ -107,9 +129,13 @@ class InvestigationEngine:
             "ioc_count": len(self.iocs),
             "phases_completed": list(self.evidence.keys()),
             "summary": {
-                "suspicious_processes": len(self.evidence.get("processes",{}).get("flagged",[])),
-                "c2_connections": len(self.evidence.get("network",{}).get("flagged",[])),
-                "ghost_processes": len(self.evidence.get("cross_validation",{}).get("memory_only",[])),
-                "persistence_keys": len(self.evidence.get("persistence",{}).get("keys",[]))
+                "suspicious_processes": len(
+                    self.evidence.get("processes",{}).get("flagged",[])),
+                "c2_connections": len(
+                    self.evidence.get("network",{}).get("flagged",[])),
+                "ghost_processes": len(
+                    self.evidence.get("cross_validation",{}).get("memory_only_names",[])),
+                "persistence_keys": len(
+                    self.evidence.get("persistence",{}).get("keys",[]))
             }
         }

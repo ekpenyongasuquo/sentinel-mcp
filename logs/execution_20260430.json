@@ -37,3 +37,23 @@
 {"timestamp": "2026-04-30T12:05:24.423060+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 33.23, "summary": "48 executables"}
 {"timestamp": "2026-04-30T12:05:24.423951+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "15 ghost processes found"}
 {"timestamp": "2026-04-30T12:24:21.349059+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "OllamaBackend", "response_length": 2158, "preview": "EXECUTIVE SUMMARY:\nThe digital forensic investigation has identified a series of ghost processes with high confidence levels, but no C2 connections or persistence keys were found within the system. Th"}
+{"timestamp": "2026-04-30T12:47:53.624142+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-04-30T12:47:53.624900+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-30T12:48:34.362969+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 40.74, "summary": "48 procs, 0 flagged"}
+{"timestamp": "2026-04-30T12:50:28.805213+00:00", "type": "TOOL_CALL", "tool": "get_network_connections", "elapsed_seconds": 114.44, "summary": "111 conns, 0 flagged"}
+{"timestamp": "2026-04-30T12:50:28.805805+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-30T12:50:28.806084+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-30T12:51:28.512196+00:00", "type": "TOOL_CALL", "tool": "extract_mft_timeline", "elapsed_seconds": 59.7, "summary": "284 events"}
+{"timestamp": "2026-04-30T12:52:05.314875+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 36.8, "summary": "48 executables"}
+{"timestamp": "2026-04-30T12:52:05.316440+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "15 ghost process names detected"}
+{"timestamp": "2026-04-30T13:04:19.769691+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "OllamaBackend", "response_length": 1967, "preview": "EXECUTIVE SUMMARY:\nThe digital forensic investigation has identified a total of fifteen ghost processes with high confidence levels across five separate instances within the system memory but without "}
+{"timestamp": "2026-04-30T13:17:58.542266+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-04-30T13:17:58.543066+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-30T13:18:54.093268+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 55.55, "summary": "48 procs, 0 flagged"}
+{"timestamp": "2026-04-30T13:21:21.634896+00:00", "type": "TOOL_CALL", "tool": "get_network_connections", "elapsed_seconds": 147.54, "summary": "111 conns, 0 flagged"}
+{"timestamp": "2026-04-30T13:21:21.635585+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-30T13:21:21.635878+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-30T13:22:04.926680+00:00", "type": "TOOL_CALL", "tool": "extract_mft_timeline", "elapsed_seconds": 43.29, "summary": "104 events"}
+{"timestamp": "2026-04-30T13:22:36.608145+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 31.68, "summary": "48 executables found"}
+{"timestamp": "2026-04-30T13:22:36.608758+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "1 ghost process names detected"}
+{"timestamp": "2026-04-30T13:32:20.431301+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "OllamaBackend", "response_length": 1806, "preview": "EXECUTIVE SUMMARY:\nThe digital forensic investigation has uncovered a single high-confidence ghost process indicative of potential malicious activity within the system under scrutinization, with no ot"}

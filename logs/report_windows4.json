@@ -1,0 +1,13 @@
+{
+  "report": "EXECUTIVE SUMMARY:\nThe digital forensic investigation has uncovered a single high-confidence ghost process indicative of potential malicious activity within the system under scrutinization, with no other suspicious processes or C2 connections detected and persistence keys absent. Network analysis revealed no flagged network connections associated with Command & Control servers typically used by threat actors for maintaining control over compromised systems.\n\nKEY FINDINGS:\n- [GHOST_PROCESS] ftk confidence: HIGH (CONFIRMED)\n- Suspicious processes found: 0 ([INFERRED])\n- C2 connections found: 0 ([INFERRED])\n- Ghost processes found: 1 ([CONFIRMED])\n- Persistence keys found: 0 ([POSSIBLE], as ghost process persistence could be a new or unrecognized technique)\n- Total IOCs (Indicators of Compromise): 1 ([CONFIRMED])\n- FLAGGED NETWORK CONNECTIONS: None detected ([INFERRED])\n- PERSISTENCE KEYS: None detected, but possibility remains as ghost process persistence may not be immediately identifiable (POSSIBLE)\n\nTOP 3 ACTIONS:\nP1 immediate - Isolate the system to prevent potential lateral movement or data exfiltration. This action is critical due to the high confidence in a persistent threat that could evolve rapidly without intervention ([CONFIRMED]).\nP2 containment - Conduct an extensive network analysis focusing on outbound traffic and known malicious IPs/URLs, as C2 activity may not be directly linked with traditional indicators but can manifest through anomalous behavior (INFERRED).\nP3 cleanup - Deploy advanced threat hunting techniques to uncover any hidden persistence mechanisms or additional IOCs that the ghost process might employ. This step is essential for a comprehensive understanding of the attacker's footprint and methods, which may not be immediately apparent (POSSIBLE).\n\n",
+  "evidence_summary": {
+    "suspicious_processes": 0,
+    "c2_connections": 0,
+    "ghost_processes": 1,
+    "persistence_keys": 0
+  },
+  "ioc_count": 1,
+  "elapsed_seconds": 861,
+  "llm_backend": "OllamaBackend",
+  "raw_evidence_text": "=== DFIR EVIDENCE SUMMARY ===\nSuspicious processes found: 0\nC2 connections found: 0\nGhost processes found: 1\nPersistence keys found: 0\nTotal IOCs: 1\n\n=== TOP FLAGGED PROCESSES ===\nNone detected\n\n=== FLAGGED NETWORK CONNECTIONS ===\nNone detected\n\n=== PERSISTENCE KEYS ===\nNone detected\n\n=== TOP IOCs ===\n- [GHOST_PROCESS] ftk confidence:HIGH\n\n=== CROSS VALIDATION ===\nGhost processes (memory only, no disk trace): None"
+}
