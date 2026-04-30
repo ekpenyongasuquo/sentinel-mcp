@@ -4,15 +4,18 @@ from base_tool import BaseSIFTTool, ToolResult
 from parser import parse_process_list, parse_network_connections
 from logger import log_tool_call
 
+TIMEOUT = 300  # 5 minutes per tool call
+
 class ProcessListTool(BaseSIFTTool):
     async def run(self, image_path, **kwargs):
         if not self.validate(image_path):
             return ToolResult("get_process_list", False, {}, error=f"File not found: {image_path}")
         start = time.time()
-        r = subprocess.run(["vol", "-f", image_path, "windows.pslist.PsList"], capture_output=True, text=True, timeout=120)
+        r = subprocess.run(["vol", "-f", image_path, "windows.pslist.PsList"],
+            capture_output=True, text=True, timeout=TIMEOUT)
         elapsed = round(time.time()-start, 2)
         data = self.parse(r.stdout)
-        log_tool_call("get_process_list", elapsed, f"{data['total']} procs")
+        log_tool_call("get_process_list", elapsed, f"{data['total']} procs, {data['flag_count']} flagged")
         return ToolResult("get_process_list", r.returncode==0, data, r.stderr or None, elapsed)
     def parse(self, raw):
         return parse_process_list(raw)
@@ -22,10 +25,11 @@ class NetworkScanTool(BaseSIFTTool):
         if not self.validate(image_path):
             return ToolResult("get_network_connections", False, {}, error=f"File not found: {image_path}")
         start = time.time()
-        r = subprocess.run(["vol", "-f", image_path, "windows.netscan.NetScan"], capture_output=True, text=True, timeout=120)
+        r = subprocess.run(["vol", "-f", image_path, "windows.netscan.NetScan"],
+            capture_output=True, text=True, timeout=TIMEOUT)
         elapsed = round(time.time()-start, 2)
         data = self.parse(r.stdout)
-        log_tool_call("get_network_connections", elapsed, f"{data['total']} conns")
+        log_tool_call("get_network_connections", elapsed, f"{data['total']} conns, {data['flag_count']} flagged")
         return ToolResult("get_network_connections", r.returncode==0, data, r.stderr or None, elapsed)
     def parse(self, raw):
         return parse_network_connections(raw)
@@ -35,7 +39,8 @@ class ModulesTool(BaseSIFTTool):
         if not self.validate(image_path):
             return ToolResult("get_loaded_modules", False, {}, error=f"File not found: {image_path}")
         start = time.time()
-        r = subprocess.run(["vol", "-f", image_path, "windows.modules.Modules"], capture_output=True, text=True, timeout=120)
+        r = subprocess.run(["vol", "-f", image_path, "windows.modules.Modules"],
+            capture_output=True, text=True, timeout=TIMEOUT)
         elapsed = round(time.time()-start, 2)
         data = self.parse(r.stdout)
         log_tool_call("get_loaded_modules", elapsed, f"{data['count']} modules")
@@ -54,7 +59,9 @@ class StringsTool(BaseSIFTTool):
         if not self.validate(image_path):
             return ToolResult("search_strings", False, {}, error=f"File not found: {image_path}")
         start = time.time()
-        r = subprocess.run(["vol", "-f", image_path, "windows.strings.Strings", "--string-file", "/dev/stdin"], input=pattern, capture_output=True, text=True, timeout=120)
+        r = subprocess.run(["vol", "-f", image_path, "windows.strings.Strings",
+            "--string-file", "/dev/stdin"], input=pattern,
+            capture_output=True, text=True, timeout=TIMEOUT)
         elapsed = round(time.time()-start, 2)
         data = self.parse(r.stdout)
         log_tool_call("search_strings", elapsed, f"{data['count']} matches")

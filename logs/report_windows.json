@@ -1,0 +1,13 @@
+{
+  "report": "[ERROR] Phi-3 timed out. Evidence package too large.",
+  "evidence_summary": {
+    "suspicious_processes": 0,
+    "c2_connections": 0,
+    "ghost_processes": 15,
+    "persistence_keys": 0
+  },
+  "ioc_count": 15,
+  "elapsed_seconds": 812,
+  "llm_backend": "OllamaBackend",
+  "iterations": 1
+}

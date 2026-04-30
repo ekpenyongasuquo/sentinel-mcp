@@ -14,3 +14,26 @@
 {"timestamp": "2026-04-30T07:21:15.465596+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 33.52, "summary": "5 executables"}
 {"timestamp": "2026-04-30T07:21:15.466188+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "0 ghost processes found"}
 {"timestamp": "2026-04-30T07:59:56.203636+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "OllamaBackend", "response_length": 3590, "preview": "**EXECUTIVE SUMMARY:**\nA DFIR investigation has identified no confirmed suspicious processes, C2 connections, or ghost processes within our network's forensic evidence as of yet; however, persistence "}
+{"timestamp": "2026-04-30T11:20:07.058657+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-04-30T11:20:07.058956+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-30T11:20:47.892843+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 40.83, "summary": "48 procs"}
+{"timestamp": "2026-04-30T11:22:36.703597+00:00", "type": "TOOL_CALL", "tool": "get_network_connections", "elapsed_seconds": 108.81, "summary": "111 conns"}
+{"timestamp": "2026-04-30T11:22:36.704170+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-30T11:22:36.704383+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-30T11:23:06.033535+00:00", "type": "TOOL_CALL", "tool": "extract_mft_timeline", "elapsed_seconds": 29.33, "summary": "92 events"}
+{"timestamp": "2026-04-30T11:23:39.660131+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 33.63, "summary": "48 executables"}
+{"timestamp": "2026-04-30T11:23:39.660950+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "15 ghost processes found"}
+{"timestamp": "2026-04-30T11:33:39.805855+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "OllamaBackend", "response_length": 52, "preview": "[ERROR] Phi-3 timed out. Evidence package too large."}
+{"timestamp": "2026-04-30T11:38:29.581781+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-04-30T11:38:29.596732+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-30T11:39:31.239239+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 61.64, "summary": "48 procs"}
+{"timestamp": "2026-04-30T12:00:34.904907+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-04-30T12:00:34.905243+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-30T12:01:33.513358+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 58.58, "summary": "48 procs, 0 flagged"}
+{"timestamp": "2026-04-30T12:04:12.012026+00:00", "type": "TOOL_CALL", "tool": "get_network_connections", "elapsed_seconds": 158.5, "summary": "111 conns, 0 flagged"}
+{"timestamp": "2026-04-30T12:04:12.012581+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-30T12:04:12.012801+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-30T12:04:51.194942+00:00", "type": "TOOL_CALL", "tool": "extract_mft_timeline", "elapsed_seconds": 39.18, "summary": "128 events"}
+{"timestamp": "2026-04-30T12:05:24.423060+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 33.23, "summary": "48 executables"}
+{"timestamp": "2026-04-30T12:05:24.423951+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "15 ghost processes found"}
+{"timestamp": "2026-04-30T12:24:21.349059+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "OllamaBackend", "response_length": 2158, "preview": "EXECUTIVE SUMMARY:\nThe digital forensic investigation has identified a series of ghost processes with high confidence levels, but no C2 connections or persistence keys were found within the system. Th"}
