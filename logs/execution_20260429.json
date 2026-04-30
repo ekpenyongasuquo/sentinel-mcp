@@ -1,0 +1,20 @@
+{"timestamp": "2026-04-29T09:43:27.674252+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memory.raw"}
+{"timestamp": "2026-04-29T09:43:27.676138+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-29T09:43:27.677673+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-29T09:43:27.678144+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-29T09:43:27.679153+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "0 ghost processes found"}
+{"timestamp": "2026-04-29T10:07:57.158426+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memory.raw"}
+{"timestamp": "2026-04-29T10:07:57.301528+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-29T10:07:57.302936+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-29T10:07:57.303229+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-29T10:07:57.304249+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "0 ghost processes found"}
+{"timestamp": "2026-04-29T10:56:49.246397+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memory.raw"}
+{"timestamp": "2026-04-29T10:56:49.276125+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-29T10:56:49.278269+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-29T10:56:49.278577+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-29T10:56:49.280221+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "0 ghost processes found"}
+{"timestamp": "2026-04-29T15:31:57.839925+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memory.raw"}
+{"timestamp": "2026-04-29T15:31:57.842450+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-29T15:31:57.843613+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-29T15:31:57.843889+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-29T15:31:57.844793+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "0 ghost processes found"}

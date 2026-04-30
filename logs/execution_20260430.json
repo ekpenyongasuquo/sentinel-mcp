@@ -1,0 +1,16 @@
+{"timestamp": "2026-04-30T06:41:31.927194+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memory.raw"}
+{"timestamp": "2026-04-30T06:41:31.928927+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-30T06:41:31.930936+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-30T06:41:31.931224+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-30T06:41:31.932078+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "0 ghost processes found"}
+{"timestamp": "2026-04-30T07:04:18.779909+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "OllamaBackend", "response_length": 2010, "preview": "**EXECUTIVE SUMMARY:**\nThe forensic investigation has identified no confirmed suspicious processes, C2 connections, ghost processes, or persistence keys thus far; however, initial indicators of compro"}
+{"timestamp": "2026-04-30T07:17:40.182578+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-04-30T07:17:40.183057+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-04-30T07:18:59.151650+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 78.94, "summary": "5 procs"}
+{"timestamp": "2026-04-30T07:19:31.955459+00:00", "type": "TOOL_CALL", "tool": "get_network_connections", "elapsed_seconds": 32.8, "summary": "5 conns"}
+{"timestamp": "2026-04-30T07:19:31.956121+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "0 suspicious procs, 0 C2 connections"}
+{"timestamp": "2026-04-30T07:19:31.956544+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-04-30T07:20:41.939993+00:00", "type": "TOOL_CALL", "tool": "extract_mft_timeline", "elapsed_seconds": 69.98, "summary": "434 events"}
+{"timestamp": "2026-04-30T07:21:15.465596+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 33.52, "summary": "5 executables"}
+{"timestamp": "2026-04-30T07:21:15.466188+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "0 ghost processes found"}
+{"timestamp": "2026-04-30T07:59:56.203636+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "OllamaBackend", "response_length": 3590, "preview": "**EXECUTIVE SUMMARY:**\nA DFIR investigation has identified no confirmed suspicious processes, C2 connections, or ghost processes within our network's forensic evidence as of yet; however, persistence "}

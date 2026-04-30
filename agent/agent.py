@@ -1,70 +1,62 @@
-import asyncio
-import json
-import argparse
+import asyncio, json, argparse, sys, os
 from datetime import datetime, timezone
 from pathlib import Path
 
-from llm_backend import get_backend
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'mcp_server'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'mcp_server', 'utils'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'mcp_server', 'tools'))
+
 from investigation_engine import InvestigationEngine
 from prompts import SENIOR_ANALYST_PROMPT
-from utils.logger import log_agent_iteration
-
-# ── MCP client placeholder ───────────────────────────────────────────────────
-# In full deployment this connects to the running MCP server.
-# For now we import tool functions directly for simplicity.
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "mcp_server"))
-
-from tools.memory import ProcessListTool, NetworkScanTool, ModulesTool, StringsTool
-from tools.disk import MFTTimelineTool, PrefetchTool, PersistenceTool
+from logger import log_agent_iteration
+from llm_backend import get_backend
+from memory import ProcessListTool, NetworkScanTool, ModulesTool, StringsTool
+from disk import MFTTimelineTool, PrefetchTool, PersistenceTool
 
 
 class DirectMCPClient:
-    """
-    Direct tool client — calls SIFT tools without a running MCP server process.
-    Suitable for single-machine deployment inside the SIFT VM.
-    """
-
-    async def get_process_list(self, image_path: str) -> dict:
+    async def get_process_list(self, image_path):
         return (await ProcessListTool().run(image_path)).data
-
-    async def get_network_connections(self, image_path: str) -> dict:
+    async def get_network_connections(self, image_path):
         return (await NetworkScanTool().run(image_path)).data
-
-    async def get_loaded_modules(self, image_path: str) -> dict:
+    async def get_loaded_modules(self, image_path):
         return (await ModulesTool().run(image_path)).data
-
-    async def search_strings(self, image_path: str, pattern: str) -> dict:
+    async def search_strings(self, image_path, pattern):
         return (await StringsTool().run(image_path, pattern=pattern)).data
-
-    async def extract_mft_timeline(self, image_path: str) -> dict:
+    async def extract_mft_timeline(self, image_path):
         return (await MFTTimelineTool().run(image_path)).data
-
-    async def analyze_prefetch(self, image_path: str) -> dict:
+    async def analyze_prefetch(self, image_path):
         return (await PrefetchTool().run(image_path)).data
-
-    async def check_persistence(self, image_path: str) -> dict:
+    async def check_persistence(self, image_path):
         return (await PersistenceTool().run(image_path)).data
 
 
-async def run_sentinel(
-    image_path: str,
-    output_path: str,
-    max_iterations: int = 3
-) -> dict:
+def compress_evidence(evidence: dict) -> dict:
     """
-    Full Sentinel-MCP pipeline:
-    1. Investigation Engine — autonomous tool chaining
-    2. LLM Backend — structured reasoning over evidence
-    3. Self-correction loop — validates CONFIRMED findings
-    4. Report saved to output_path
+    Reduce evidence size before sending to Phi-3.
+    Only send summary and IOCs — not full raw data.
+    Phi-3 has small context window — keep it under 2000 tokens.
     """
+    compressed = {
+        "summary": evidence.get("summary", {}),
+        "ioc_count": evidence.get("ioc_count", 0),
+        "iocs": evidence.get("iocs", []),
+        "attack_timeline": evidence.get("attack_timeline", [])[:10],
+        "cross_validation": evidence.get("evidence", {}).get("cross_validation", {}),
+        "flagged_processes": evidence.get("evidence", {}).get("processes", {}).get("flagged", []),
+        "flagged_network": evidence.get("evidence", {}).get("network", {}).get("flagged", []),
+        "persistence_keys": evidence.get("evidence", {}).get("persistence", {}).get("keys", []),
+    }
+    return compressed
+
+
+async def run_sentinel(image_path: str, output_path: str, max_iterations: int = 2) -> dict:
     start = datetime.now(timezone.utc)
     print(f"\n[Sentinel-MCP] Starting investigation")
     print(f"[Sentinel-MCP] Image: {image_path}")
     print(f"[Sentinel-MCP] Output: {output_path}\n")
 
-    # Step 1 — Investigation Engine
     client = DirectMCPClient()
     engine = InvestigationEngine(client)
     evidence = await engine.investigate(image_path)
@@ -73,44 +65,34 @@ async def run_sentinel(
     print(f"[Sentinel-MCP] IOCs found: {evidence['ioc_count']}")
     print(f"[Sentinel-MCP] Phases: {evidence['phases_completed']}\n")
 
-    # Step 2 — LLM reasoning
+    # Compress evidence for Phi-3 context window
+    compressed = compress_evidence(evidence)
+    print(f"[Sentinel-MCP] Evidence compressed for LLM context window")
+
     backend = get_backend()
     user_prompt = (
-        f"Analyse this forensic evidence and produce the full report:\n\n"
-        f"{json.dumps(evidence, indent=2)}"
+        f"You are analysing forensic evidence from a DFIR investigation.\n"
+        f"Evidence summary:\n{json.dumps(compressed, indent=2)}\n\n"
+        f"Produce a concise forensic report with:\n"
+        f"1. EXECUTIVE SUMMARY (3 sentences)\n"
+        f"2. KEY FINDINGS with confidence levels [CONFIRMED/INFERRED/POSSIBLE]\n"
+        f"3. TOP 3 RECOMMENDED ACTIONS\n"
+        f"Keep the report under 500 words."
     )
 
     iteration = 0
     report = ""
-
     while iteration < max_iterations:
-        print(f"[Iteration {iteration + 1}/{max_iterations}] "
+        print(f"[Iteration {iteration+1}/{max_iterations}] "
               f"Sending to {backend.__class__.__name__}...\n")
-
         response_text = ""
         for chunk in backend.stream(SENIOR_ANALYST_PROMPT, user_prompt):
             print(chunk, end="", flush=True)
             response_text += chunk
+        log_agent_iteration(iteration, response_text, backend.__class__.__name__)
+        report = response_text
+        break
 
-        log_agent_iteration(iteration, response_text,
-                            backend.__class__.__name__)
-
-        # Self-correction pass
-        if "[CONFIRMED]" in response_text and iteration < max_iterations - 1:
-            print(f"\n\n[Self-correction] Reviewing CONFIRMED findings...\n")
-            user_prompt = (
-                f"{response_text}\n\n"
-                f"Review every [CONFIRMED] finding above. "
-                f"For any finding where you cannot cite a specific tool "
-                f"call and artifact, downgrade it to [INFERRED] and "
-                f"explain why. Output the revised full report only."
-            )
-            iteration += 1
-        else:
-            report = response_text
-            break
-
-    # Step 3 — Save report
     elapsed = (datetime.now(timezone.utc) - start).seconds
     result = {
         "report": report,
@@ -132,12 +114,8 @@ async def run_sentinel(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Sentinel-MCP DFIR Agent")
-    parser.add_argument("--image", required=True,
-                        help="Path to memory or disk image")
-    parser.add_argument("--output", default="logs/report.json",
-                        help="Output path for JSON report")
-    parser.add_argument("--iterations", type=int, default=3,
-                        help="Max self-correction iterations")
+    parser.add_argument("--image", required=True, help="Path to memory or disk image")
+    parser.add_argument("--output", default="logs/report.json", help="Output path")
+    parser.add_argument("--iterations", type=int, default=2, help="Max iterations")
     args = parser.parse_args()
-
     asyncio.run(run_sentinel(args.image, args.output, args.iterations))
