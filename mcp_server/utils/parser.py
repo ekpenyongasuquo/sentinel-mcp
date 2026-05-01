@@ -5,23 +5,30 @@ Column positions verified against Volatility 3 Framework 2.27.0
 
 MALWARE_KEYWORDS = [
     "mimikatz", "psexec", "meterpreter", "nc.exe",
-    "ncat", "cobalt", "beacon", "empire", "powersploit"
+    "ncat", "cobalt", "beacon", "empire", "powersploit",
+    "netcat", "pwdump", "fgdump", "wce.exe", "gsecdump"
 ]
 
-C2_PORTS = [4444, 4445, 1337, 31337, 8888, 9999, 6666]
+SUSPICIOUS_KEYWORDS = [
+    "ftpbasicsvr",  # FTP server — unusual on workstation
+    "ftk",          # Forensic tool — suspicious as ghost process
+    "snmp",         # SNMP — often exploited
+    "iashost",      # IAS — remote authentication service
+]
+
+C2_PORTS = [4444, 4445, 1337, 31337, 8888, 9999, 6666, 443, 80]
 
 
 def parse_process_list(raw: str) -> dict:
     """
     Parse Volatility 3 windows.pslist.PsList output.
-    Columns: PID PPID ImageFileName Offset Threads Handles SessionId Wow64 CreateTime...
-    Header line starts with 'PID'
+    Tab-separated columns:
+    PID  PPID  ImageFileName  Offset  Threads  Handles  SessionId  Wow64  CreateTime...
     """
     lines = raw.strip().split("\n")
     processes = []
 
     for line in lines:
-        # Skip header, empty lines, Volatility framework lines
         stripped = line.strip()
         if not stripped:
             continue
@@ -30,7 +37,6 @@ def parse_process_list(raw: str) -> dict:
         if stripped.startswith("WARNING") or stripped.startswith("Progress"):
             continue
 
-        # Split by whitespace
         parts = stripped.split()
         if len(parts) < 3:
             continue
@@ -38,9 +44,8 @@ def parse_process_list(raw: str) -> dict:
         try:
             pid = parts[0]
             ppid = parts[1]
-            name = parts[2]  # ImageFileName is column 3
+            name = parts[2]
 
-            # Skip if PID is not numeric
             if not pid.isdigit():
                 continue
 
@@ -53,23 +58,36 @@ def parse_process_list(raw: str) -> dict:
         except (IndexError, ValueError):
             continue
 
-    flagged = [
+    # Flag confirmed malware names
+    confirmed_malware = [
         p for p in processes
         if any(k in p["name"].lower() for k in MALWARE_KEYWORDS)
     ]
 
+    # Flag suspicious process names
+    suspicious = [
+        p for p in processes
+        if any(k in p["name"].lower() for k in SUSPICIOUS_KEYWORDS)
+        and p not in confirmed_malware
+    ]
+
+    all_flagged = confirmed_malware + suspicious
+
     return {
         "total": len(processes),
         "processes": processes,
-        "flagged": flagged,
-        "flag_count": len(flagged)
+        "flagged": all_flagged,
+        "confirmed_malware": confirmed_malware,
+        "suspicious": suspicious,
+        "flag_count": len(all_flagged)
     }
 
 
 def parse_network_connections(raw: str) -> dict:
     """
     Parse Volatility 3 windows.netscan.NetScan output.
-    Columns: Offset Proto LocalAddr LocalPort ForeignAddr ForeignPort State PID Owner Created
+    Tab-separated columns:
+    Offset  Proto  LocalAddr  LocalPort  ForeignAddr  ForeignPort  State  PID  Owner  Created
     """
     lines = raw.strip().split("\n")
     connections = []
@@ -89,7 +107,8 @@ def parse_network_connections(raw: str) -> dict:
 
         try:
             proto = parts[1]
-            local = f"{parts[2]}:{parts[3]}"
+            local_addr = parts[2]
+            local_port = parts[3]
             remote_ip = parts[4]
             remote_port_str = parts[5]
             state = parts[6]
@@ -100,7 +119,7 @@ def parse_network_connections(raw: str) -> dict:
             remote_port = int(remote_port_str)
             connections.append({
                 "proto": proto,
-                "local": local,
+                "local": f"{local_addr}:{local_port}",
                 "remote": f"{remote_ip}:{remote_port}",
                 "remote_ip": remote_ip,
                 "remote_port": remote_port,
@@ -112,6 +131,7 @@ def parse_network_connections(raw: str) -> dict:
     flagged = [
         c for c in connections
         if c.get("remote_port") in C2_PORTS
+        and c.get("remote_ip") not in ["0.0.0.0", "127.0.0.1", "::"]
     ]
 
     return {
