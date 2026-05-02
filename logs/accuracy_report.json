@@ -1,0 +1,172 @@
+{
+  "ground_truth": {
+    "known_suspicious_processes": [
+      "ftpbasicsvr.exe",
+      "snmp.exe",
+      "iashost.exe",
+      "ftk"
+    ],
+    "known_c2_ips": [
+      "54.213.58.70",
+      "54.230.117.162",
+      "93.184.216.139"
+    ],
+    "known_ghost_processes": [
+      "ftk"
+    ],
+    "known_persistence_keys": 6,
+    "total_expected_iocs": 4
+  },
+  "individual_results": [
+    {
+      "report_file": "report.json",
+      "llm_backend": "OllamaBackend",
+      "elapsed_seconds": 1366,
+      "ioc_count": 0,
+      "scores": {
+        "suspicious_process_recall": 0.0,
+        "c2_detection_recall": 0.0,
+        "persistence_recall": 0.0,
+        "ghost_process_recall": 0.0,
+        "overall_recall": 0.0,
+        "c2_ips_named_in_report": 0,
+        "hallucination_rate": 0.0,
+        "hallucinated_ips": []
+      }
+    },
+    {
+      "report_file": "report_final.json",
+      "llm_backend": "OllamaBackend",
+      "elapsed_seconds": 2084,
+      "ioc_count": 4,
+      "scores": {
+        "suspicious_process_recall": 1.0,
+        "c2_detection_recall": 1.0,
+        "persistence_recall": 1.0,
+        "ghost_process_recall": 1.0,
+        "overall_recall": 1.0,
+        "c2_ips_named_in_report": 3,
+        "hallucination_rate": 0.0,
+        "hallucinated_ips": []
+      }
+    },
+    {
+      "report_file": "report_groq.json",
+      "llm_backend": "GroqBackend",
+      "elapsed_seconds": 351,
+      "ioc_count": 4,
+      "scores": {
+        "suspicious_process_recall": 1.0,
+        "c2_detection_recall": 1.0,
+        "persistence_recall": 1.0,
+        "ghost_process_recall": 1.0,
+        "overall_recall": 1.0,
+        "c2_ips_named_in_report": 3,
+        "hallucination_rate": 0.0,
+        "hallucinated_ips": []
+      }
+    },
+    {
+      "report_file": "report_memdump.json",
+      "llm_backend": "OllamaBackend",
+      "elapsed_seconds": 2536,
+      "ioc_count": 0,
+      "scores": {
+        "suspicious_process_recall": 0.0,
+        "c2_detection_recall": 0.0,
+        "persistence_recall": 0.0,
+        "ghost_process_recall": 0.0,
+        "overall_recall": 0.0,
+        "c2_ips_named_in_report": 0,
+        "hallucination_rate": 0.0,
+        "hallucinated_ips": []
+      }
+    },
+    {
+      "report_file": "report_windows.json",
+      "llm_backend": "OllamaBackend",
+      "elapsed_seconds": 812,
+      "ioc_count": 15,
+      "scores": {
+        "suspicious_process_recall": 0.0,
+        "c2_detection_recall": 0.0,
+        "persistence_recall": 0.0,
+        "ghost_process_recall": 1.0,
+        "overall_recall": 0.25,
+        "c2_ips_named_in_report": 0,
+        "hallucination_rate": 0.0,
+        "hallucinated_ips": []
+      }
+    },
+    {
+      "report_file": "report_windows2.json",
+      "llm_backend": "OllamaBackend",
+      "elapsed_seconds": 1426,
+      "ioc_count": 15,
+      "scores": {
+        "suspicious_process_recall": 0.0,
+        "c2_detection_recall": 0.0,
+        "persistence_recall": 0.0,
+        "ghost_process_recall": 1.0,
+        "overall_recall": 0.25,
+        "c2_ips_named_in_report": 0,
+        "hallucination_rate": 0.0,
+        "hallucinated_ips": []
+      }
+    },
+    {
+      "report_file": "report_windows3.json",
+      "llm_backend": "OllamaBackend",
+      "elapsed_seconds": 986,
+      "ioc_count": 15,
+      "scores": {
+        "suspicious_process_recall": 0.0,
+        "c2_detection_recall": 0.0,
+        "persistence_recall": 0.0,
+        "ghost_process_recall": 1.0,
+        "overall_recall": 0.25,
+        "c2_ips_named_in_report": 0,
+        "hallucination_rate": 0.0,
+        "hallucinated_ips": []
+      }
+    },
+    {
+      "report_file": "report_windows4.json",
+      "llm_backend": "OllamaBackend",
+      "elapsed_seconds": 861,
+      "ioc_count": 1,
+      "scores": {
+        "suspicious_process_recall": 0.0,
+        "c2_detection_recall": 0.0,
+        "persistence_recall": 0.0,
+        "ghost_process_recall": 1.0,
+        "overall_recall": 0.25,
+        "c2_ips_named_in_report": 0,
+        "hallucination_rate": 0.0,
+        "hallucinated_ips": []
+      }
+    },
+    {
+      "report_file": "test_run.json",
+      "llm_backend": "GroqBackend",
+      "elapsed_seconds": 318,
+      "ioc_count": 4,
+      "scores": {
+        "suspicious_process_recall": 1.0,
+        "c2_detection_recall": 1.0,
+        "persistence_recall": 1.0,
+        "ghost_process_recall": 1.0,
+        "overall_recall": 1.0,
+        "c2_ips_named_in_report": 3,
+        "hallucination_rate": 0.0,
+        "hallucinated_ips": []
+      }
+    }
+  ],
+  "summary": {
+    "total_runs": 9,
+    "avg_overall_recall": 0.44,
+    "avg_hallucination_rate": 0.0,
+    "avg_elapsed_seconds": 1193
+  }
+}

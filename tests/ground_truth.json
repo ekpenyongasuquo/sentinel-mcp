@@ -1,0 +1,19 @@
+{
+  "image": "memdump.mem",
+  "os": "Windows Vista/Server 2008 SP1 32-bit",
+  "captured": "2014-01-08 17:54:20 UTC",
+  "known_suspicious_processes": [
+    "ftpbasicsvr.exe",
+    "snmp.exe",
+    "iashost.exe",
+    "ftk"
+  ],
+  "known_c2_ips": [
+    "54.213.58.70",
+    "54.230.117.162",
+    "93.184.216.139"
+  ],
+  "known_ghost_processes": ["ftk"],
+  "known_persistence_keys": 6,
+  "total_expected_iocs": 4
+}
