@@ -64,3 +64,20 @@
 {"timestamp": "2026-05-01T09:38:08.704502+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 49.97, "summary": "48 executables found"}
 {"timestamp": "2026-05-01T09:38:08.706849+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "1 ghost process names detected"}
 {"timestamp": "2026-05-01T09:38:17.810741+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "GroqBackend", "response_length": 1419, "preview": "**EXECUTIVE SUMMARY**\nA malicious actor has compromised the system, establishing Command and Control (C2) connections with multiple external IP addresses. The attack timeline indicates that the malici"}
+{"timestamp": "2026-05-01T12:36:12.343585+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-05-01T12:36:12.343979+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-05-01T12:37:04.747640+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 52.26, "summary": "48 procs, 4 flagged"}
+{"timestamp": "2026-05-01T12:39:12.467573+00:00", "type": "TOOL_CALL", "tool": "get_network_connections", "elapsed_seconds": 127.72, "summary": "111 conns, 9 flagged"}
+{"timestamp": "2026-05-01T12:39:12.468334+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "4 suspicious procs, 9 C2 connections"}
+{"timestamp": "2026-05-01T12:39:12.468811+00:00", "type": "INVESTIGATION", "phase": "PHASE2_PROCESS", "detail": "deep dive triggered"}
+{"timestamp": "2026-05-01T12:39:13.106140+00:00", "type": "TOOL_CALL", "tool": "check_persistence", "elapsed_seconds": 0.63, "summary": "6 keys"}
+{"timestamp": "2026-05-01T12:39:52.988550+00:00", "type": "TOOL_CALL", "tool": "get_loaded_modules", "elapsed_seconds": 39.88, "summary": "149 modules"}
+{"timestamp": "2026-05-01T12:39:52.989135+00:00", "type": "INVESTIGATION", "phase": "PHASE2_NETWORK", "detail": "network deep dive triggered"}
+{"timestamp": "2026-05-01T12:39:54.943119+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 1.95, "summary": "0 matches"}
+{"timestamp": "2026-05-01T12:39:56.941585+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 2.0, "summary": "0 matches"}
+{"timestamp": "2026-05-01T12:39:58.955500+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 2.01, "summary": "0 matches"}
+{"timestamp": "2026-05-01T12:39:58.955916+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-05-01T12:40:32.908638+00:00", "type": "TOOL_CALL", "tool": "extract_mft_timeline", "elapsed_seconds": 33.95, "summary": "122 events"}
+{"timestamp": "2026-05-01T12:41:21.945348+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 49.03, "summary": "48 executables found"}
+{"timestamp": "2026-05-01T12:41:21.946240+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "1 ghost process names detected"}
+{"timestamp": "2026-05-01T12:41:30.999267+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "GroqBackend", "response_length": 1422, "preview": "**EXECUTIVE SUMMARY**\nA malicious actor has compromised the system, establishing Command and Control (C2) connections with multiple external IP addresses. The attack timeline indicates that the malici"}

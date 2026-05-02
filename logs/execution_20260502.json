@@ -1,0 +1,51 @@
+{"timestamp": "2026-05-02T07:45:31.675609+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-05-02T07:45:31.676165+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-05-02T07:46:25.310673+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 53.61, "summary": "48 procs, 4 flagged"}
+{"timestamp": "2026-05-02T07:48:43.230720+00:00", "type": "TOOL_CALL", "tool": "get_network_connections", "elapsed_seconds": 137.91, "summary": "111 conns, 9 flagged"}
+{"timestamp": "2026-05-02T07:48:43.231772+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "4 suspicious procs, 9 C2 connections"}
+{"timestamp": "2026-05-02T07:48:43.232134+00:00", "type": "INVESTIGATION", "phase": "PHASE2_PROCESS", "detail": "deep dive triggered"}
+{"timestamp": "2026-05-02T07:48:44.841627+00:00", "type": "TOOL_CALL", "tool": "check_persistence", "elapsed_seconds": 1.61, "summary": "6 keys"}
+{"timestamp": "2026-05-02T07:49:31.820302+00:00", "type": "TOOL_CALL", "tool": "get_loaded_modules", "elapsed_seconds": 46.98, "summary": "149 modules"}
+{"timestamp": "2026-05-02T07:49:31.821025+00:00", "type": "INVESTIGATION", "phase": "PHASE2_NETWORK", "detail": "network deep dive triggered"}
+{"timestamp": "2026-05-02T07:49:34.048392+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 2.23, "summary": "0 matches"}
+{"timestamp": "2026-05-02T07:49:36.513600+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 2.46, "summary": "0 matches"}
+{"timestamp": "2026-05-02T07:49:39.805036+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 3.29, "summary": "0 matches"}
+{"timestamp": "2026-05-02T07:49:39.805914+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-05-02T07:50:55.539048+00:00", "type": "TOOL_CALL", "tool": "extract_mft_timeline", "elapsed_seconds": 75.73, "summary": "152 events"}
+{"timestamp": "2026-05-02T07:51:35.617213+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 40.08, "summary": "48 executables found"}
+{"timestamp": "2026-05-02T07:51:35.617936+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "1 ghost process names detected"}
+{"timestamp": "2026-05-02T07:51:39.908167+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "GroqBackend", "response_length": 1375, "preview": "**EXECUTIVE SUMMARY**\nA thorough analysis of the provided forensic evidence reveals a potential compromise of the system, with multiple suspicious processes and Command and Control (C2) connections de"}
+{"timestamp": "2026-05-02T07:51:57.431566+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-05-02T07:51:57.431847+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-05-02T07:52:28.582454+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 31.15, "summary": "48 procs, 4 flagged"}
+{"timestamp": "2026-05-02T07:53:49.356353+00:00", "type": "TOOL_CALL", "tool": "get_network_connections", "elapsed_seconds": 80.77, "summary": "111 conns, 9 flagged"}
+{"timestamp": "2026-05-02T07:53:49.356897+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "4 suspicious procs, 9 C2 connections"}
+{"timestamp": "2026-05-02T07:53:49.357144+00:00", "type": "INVESTIGATION", "phase": "PHASE2_PROCESS", "detail": "deep dive triggered"}
+{"timestamp": "2026-05-02T07:53:49.882395+00:00", "type": "TOOL_CALL", "tool": "check_persistence", "elapsed_seconds": 0.52, "summary": "6 keys"}
+{"timestamp": "2026-05-02T07:54:21.709992+00:00", "type": "TOOL_CALL", "tool": "get_loaded_modules", "elapsed_seconds": 31.83, "summary": "149 modules"}
+{"timestamp": "2026-05-02T07:54:21.710547+00:00", "type": "INVESTIGATION", "phase": "PHASE2_NETWORK", "detail": "network deep dive triggered"}
+{"timestamp": "2026-05-02T07:54:23.483713+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 1.77, "summary": "0 matches"}
+{"timestamp": "2026-05-02T07:54:25.365693+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 1.88, "summary": "0 matches"}
+{"timestamp": "2026-05-02T07:54:27.212822+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 1.85, "summary": "0 matches"}
+{"timestamp": "2026-05-02T07:54:27.213074+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-05-02T07:54:57.945753+00:00", "type": "TOOL_CALL", "tool": "extract_mft_timeline", "elapsed_seconds": 30.73, "summary": "98 events"}
+{"timestamp": "2026-05-02T07:55:29.062372+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 31.12, "summary": "48 executables found"}
+{"timestamp": "2026-05-02T07:55:29.062953+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "1 ghost process names detected"}
+{"timestamp": "2026-05-02T07:55:37.022730+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "GroqBackend", "response_length": 1304, "preview": "**EXECUTIVE SUMMARY**\nA malicious actor has compromised the system, establishing Command and Control (C2) connections with multiple external IP addresses. The attack timeline indicates that the malici"}
+{"timestamp": "2026-05-02T07:56:21.431111+00:00", "type": "INVESTIGATION", "phase": "START", "detail": "/media/sf_sift-data/memdump.mem"}
+{"timestamp": "2026-05-02T07:56:21.431494+00:00", "type": "INVESTIGATION", "phase": "PHASE1_START", "detail": "parallel triage beginning"}
+{"timestamp": "2026-05-02T07:56:53.725363+00:00", "type": "TOOL_CALL", "tool": "get_process_list", "elapsed_seconds": 32.29, "summary": "48 procs, 4 flagged"}
+{"timestamp": "2026-05-02T07:58:13.223389+00:00", "type": "TOOL_CALL", "tool": "get_network_connections", "elapsed_seconds": 79.5, "summary": "111 conns, 9 flagged"}
+{"timestamp": "2026-05-02T07:58:13.223906+00:00", "type": "INVESTIGATION", "phase": "PHASE1_DONE", "detail": "4 suspicious procs, 9 C2 connections"}
+{"timestamp": "2026-05-02T07:58:13.224111+00:00", "type": "INVESTIGATION", "phase": "PHASE2_PROCESS", "detail": "deep dive triggered"}
+{"timestamp": "2026-05-02T07:58:13.786015+00:00", "type": "TOOL_CALL", "tool": "check_persistence", "elapsed_seconds": 0.56, "summary": "6 keys"}
+{"timestamp": "2026-05-02T07:58:46.325250+00:00", "type": "TOOL_CALL", "tool": "get_loaded_modules", "elapsed_seconds": 32.54, "summary": "149 modules"}
+{"timestamp": "2026-05-02T07:58:46.325858+00:00", "type": "INVESTIGATION", "phase": "PHASE2_NETWORK", "detail": "network deep dive triggered"}
+{"timestamp": "2026-05-02T07:58:48.151816+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 1.83, "summary": "0 matches"}
+{"timestamp": "2026-05-02T07:58:49.932462+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 1.78, "summary": "0 matches"}
+{"timestamp": "2026-05-02T07:58:51.720252+00:00", "type": "TOOL_CALL", "tool": "search_strings", "elapsed_seconds": 1.79, "summary": "0 matches"}
+{"timestamp": "2026-05-02T07:58:51.720563+00:00", "type": "INVESTIGATION", "phase": "PHASE3", "detail": "cross-validating memory vs disk"}
+{"timestamp": "2026-05-02T07:59:22.211600+00:00", "type": "TOOL_CALL", "tool": "extract_mft_timeline", "elapsed_seconds": 30.49, "summary": "98 events"}
+{"timestamp": "2026-05-02T07:59:56.194233+00:00", "type": "TOOL_CALL", "tool": "analyze_prefetch", "elapsed_seconds": 33.98, "summary": "48 executables found"}
+{"timestamp": "2026-05-02T07:59:56.194797+00:00", "type": "INVESTIGATION", "phase": "PHASE3_DONE", "detail": "1 ghost process names detected"}
+{"timestamp": "2026-05-02T07:59:59.770072+00:00", "type": "AGENT_ITERATION", "iteration": 0, "backend": "GroqBackend", "response_length": 1399, "preview": "**EXECUTIVE SUMMARY**\nA malicious actor has compromised the system, establishing Command and Control (C2) connections with multiple external IP addresses. The attack timeline indicates that the malici"}
