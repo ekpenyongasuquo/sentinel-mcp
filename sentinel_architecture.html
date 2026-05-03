@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinel-MCP Architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0e1a;
+    color: #e2e8f0;
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .diagram {
+    width: 1100px;
+    position: relative;
+  }
+
+  /* Title */
+  .title-block {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .title-block h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #f0f4ff;
+    letter-spacing: -0.5px;
+  }
+  .title-block h1 span { color: #38bdf8; }
+  .title-block p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Outer boundary */
+  .outer-boundary {
+    border: 2px solid #1e3a5f;
+    border-radius: 20px;
+    padding: 32px;
+    background: #0d1424;
+    position: relative;
+  }
+  .outer-boundary-label {
+    position: absolute;
+    top: -13px;
+    left: 32px;
+    background: #0a0e1a;
+    padding: 2px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #38bdf8;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  /* Main pipeline row */
+  .pipeline {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 32px;
+  }
+
+  /* Arrow between boxes */
+  .arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .arrow::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #334155, #38bdf8);
+    transform: translateY(-50%);
+  }
+  .arrow::after {
+    content: '▶';
+    color: #38bdf8;
+    font-size: 14px;
+    position: relative;
+    z-index: 1;
+    background: #0d1424;
+    padding: 0 4px;
+  }
+  .arrow-label {
+    position: absolute;
+    top: calc(50% - 22px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: #475569;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  /* Box base */
+  .box {
+    flex: 1;
+    border-radius: 14px;
+    padding: 20px 18px;
+    position: relative;
+    border: 1px solid;
+  }
+  .box-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .box-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.2px;
+  }
+  .box-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #94a3b8;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .box-items {
+    list-style: none;
+  }
+  .box-items li {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    padding: 3px 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .box-items li::before {
+    content: '›';
+    color: inherit;
+    opacity: 0.6;
+    font-size: 12px;
+  }
+
+  /* Box colour themes */
+  .box-data {
+    background: #0f1e35;
+    border-color: #1d4ed8;
+  }
+  .box-data .box-title { color: #60a5fa; }
+  .box-data .box-items li::before { color: #60a5fa; }
+
+  .box-mcp {
+    background: #1a0f0a;
+    border-color: #c2410c;
+  }
+  .box-mcp .box-title { color: #fb923c; }
+  .box-mcp .box-items li::before { color: #fb923c; }
+
+  .box-engine {
+    background: #0a1a0f;
+    border-color: #15803d;
+  }
+  .box-engine .box-title { color: #4ade80; }
+  .box-engine .box-items li::before { color: #4ade80; }
+
+  .box-report {
+    background: #1a0a1a;
+    border-color: #7e22ce;
+  }
+  .box-report .box-title { color: #c084fc; }
+  .box-report .box-items li::before { color: #c084fc; }
+
+  /* LLM backends row */
+  .llm-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .llm-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #64748b;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .llm-card {
+    flex: 1;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid;
+    position: relative;
+    overflow: hidden;
+  }
+  .llm-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .llm-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .llm-name {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .llm-detail {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  /* Offline card */
+  .llm-offline {
+    background: #0a1520;
+    border-color: #164e63;
+  }
+  .llm-offline::before { background: #06b6d4; }
+  .llm-offline .llm-badge { background: #164e63; color: #06b6d4; }
+  .llm-offline .llm-name { color: #06b6d4; }
+
+  /* Groq card */
+  .llm-groq {
+    background: #0f1a0a;
+    border-color: #14532d;
+  }
+  .llm-groq::before { background: #22c55e; }
+  .llm-groq .llm-badge { background: #14532d; color: #22c55e; }
+  .llm-groq .llm-name { color: #22c55e; }
+
+  /* Claude card */
+  .llm-claude {
+    background: #1a1008;
+    border-color: #78350f;
+  }
+  .llm-claude::before { background: #f59e0b; }
+  .llm-claude .llm-badge { background: #78350f; color: #f59e0b; }
+  .llm-claude .llm-name { color: #f59e0b; }
+
+  /* Privacy boundary */
+  .privacy-boundary {
+    border: 2px dashed #164e63;
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-top: 4px;
+    position: relative;
+    background: rgba(6, 182, 212, 0.03);
+  }
+  .privacy-boundary-label {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: #0d1424;
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #06b6d4;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .privacy-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #0e7490;
+    text-align: center;
+  }
+
+  /* Security constraint badge */
+  .constraint-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: #450a0a;
+    border: 1px solid #b91c1c;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: #fca5a5;
+    line-height: 1.4;
+    max-width: 120px;
+    text-align: center;
+  }
+
+  /* Metrics row */
+  .metrics {
+    display: flex;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .metric-card {
+    flex: 1;
+    background: #0d1424;
+    border: 1px solid #1e293b;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .metric-value {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .metric-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #64748b;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Judging criteria strip */
+  .criteria-strip {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .criteria-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<div class="diagram">
+
+  <!-- Title -->
+  <div class="title-block">
+    <h1>Sentinel<span>-MCP</span></h1>
+    <p>Type-Safe Autonomous DFIR Investigator · Find Evil! Hackathon 2026</p>
+  </div>
+
+  <!-- Outer boundary -->
+  <div class="outer-boundary">
+    <span class="outer-boundary-label">CUSTOM MCP SERVER ARCHITECTURE — APPROACH #2</span>
+
+    <!-- Pipeline row -->
+    <div class="pipeline">
+
+      <!-- Box 1: Case Data -->
+      <div class="box box-data">
+        <span class="box-icon">💾</span>
+        <div class="box-title">Case Data</div>
+        <div class="box-subtitle">memdump.mem<br>512MB · Windows Vista · 2014</div>
+        <ul class="box-items">
+          <li>Raw memory dump</li>
+          <li>SHA256 verified</li>
+          <li>Read-only access</li>
+          <li>Never modified</li>
+        </ul>
+      </div>
+
+      <!-- Arrow 1 -->
+      <div class="arrow">
+        <span class="arrow-label">file path<br>only</span>
+      </div>
+
+      <!-- Box 2: MCP Server -->
+      <div class="box box-mcp">
+        <span class="box-icon">🔒</span>
+        <div class="box-title">MCP Server</div>
+        <div class="box-subtitle">7 Typed Forensic Functions<br>No shell access exposed</div>
+        <ul class="box-items">
+          <li>get_process_list</li>
+          <li>get_network_connections</li>
+          <li>check_persistence</li>
+          <li>extract_mft_timeline</li>
+          <li>analyze_prefetch</li>
+          <li>get_loaded_modules</li>
+          <li>search_strings</li>
+        </ul>
+        <div class="constraint-badge">🚫 No execute_shell_cmd<br>Architectural · Not Prompt</div>
+      </div>
+
+      <!-- Arrow 2 -->
+      <div class="arrow">
+        <span class="arrow-label">structured<br>JSON only</span>
+      </div>
+
+      <!-- Box 3: Investigation Engine -->
+      <div class="box box-engine">
+        <span class="box-icon">🔍</span>
+        <div class="box-title">Investigation Engine</div>
+        <div class="box-subtitle">Autonomous tool chaining<br>Evidence-driven sequencing</div>
+        <ul class="box-items">
+          <li>Phase 1: Process + Network ⚡parallel</li>
+          <li>Phase 2: Deep dive (signal-triggered)</li>
+          <li>Phase 3: Memory vs disk cross-val</li>
+          <li>IOC extraction + timeline build</li>
+          <li>Ghost process detection</li>
+        </ul>
+      </div>
+
+      <!-- Arrow 3 -->
+      <div class="arrow">
+        <span class="arrow-label">compressed<br>evidence</span>
+      </div>
+
+      <!-- Box 4: Report -->
+      <div class="box box-report">
+        <span class="box-icon">📋</span>
+        <div class="box-title">DFIR Report</div>
+        <div class="box-subtitle">Structured forensic output<br>Saved to JSON + terminal</div>
+        <ul class="box-items">
+          <li>Executive Summary</li>
+          <li>[CONFIRMED] findings</li>
+          <li>[INFERRED] findings</li>
+          <li>[POSSIBLE] findings</li>
+          <li>P1/P2/P3 Remediation</li>
+          <li>Full execution logs</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- LLM Backends -->
+    <div class="llm-header">LLM Backend — Switch With One Environment Variable</div>
+    <div class="llm-row">
+
+      <div class="llm-card llm-offline">
+        <div class="llm-badge">LLM_MODE=offline</div>
+        <div class="llm-name">Phi-3 Mini via Ollama</div>
+        <div class="llm-detail">
+          Runs entirely on local CPU<br>
+          Zero forensic data sent externally<br>
+          Air-gap safe · $0 forever<br>
+          ~35 min on CPU-only VM
+        </div>
+        <div class="privacy-boundary" style="margin-top:12px;">
+          <span class="privacy-boundary-label">PRIVACY BOUNDARY</span>
+          <div class="privacy-text">Zero bytes of forensic data leave this boundary</div>
+        </div>
+      </div>
+
+      <div class="llm-card llm-groq">
+        <div class="llm-badge">LLM_MODE=groq ← PRIMARY DEMO</div>
+        <div class="llm-name">Llama 3.3 70B via Groq</div>
+        <div class="llm-detail">
+          Free cloud API · No credit card<br>
+          100% recall · 0% hallucination<br>
+          ~296 seconds average<br>
+          Production-ready quality
+        </div>
+      </div>
+
+      <div class="llm-card llm-claude">
+        <div class="llm-badge">LLM_MODE=cloud</div>
+        <div class="llm-name">Claude API via Anthropic</div>
+        <div class="llm-detail">
+          Maximum reasoning depth<br>
+          Requires API credits<br>
+          Richest narrative output<br>
+          ~3 min when available
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Metrics -->
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-value" style="color:#ef4444;">0%</div>
+        <div class="metric-label">Hallucination Rate<br>across 10 runs</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" style="color:#22c55e;">100%</div>
+        <div class="metric-label">IOC Recall<br>Groq mode · 3 runs</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" style="color:#38bdf8;">296s</div>
+        <div class="metric-label">Avg Full Investigation<br>Groq mode</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" style="color:#f59e0b;">4</div>
+        <div class="metric-label">Real IOCs Detected<br>Windows Vista image</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" style="color:#c084fc;">3</div>
+        <div class="metric-label">LLM Backends<br>One flag to switch</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" style="color:#fb923c;">7</div>
+        <div class="metric-label">Typed MCP Tools<br>Zero shell access</div>
+      </div>
+    </div>
+
+    <!-- Judging criteria -->
+    <div class="criteria-strip">
+      <span class="criteria-pill" style="color:#ef4444;border-color:#7f1d1d;">Criterion 1: Autonomous Execution ✓</span>
+      <span class="criteria-pill" style="color:#22c55e;border-color:#14532d;">Criterion 2: IR Accuracy — 0% hallucination ✓</span>
+      <span class="criteria-pill" style="color:#38bdf8;border-color:#164e63;">Criterion 3: Breadth — 7 tools, 3 phases ✓</span>
+      <span class="criteria-pill" style="color:#fb923c;border-color:#7c2d12;">Criterion 4: Constraints — Architectural ✓</span>
+      <span class="criteria-pill" style="color:#c084fc;border-color:#581c87;">Criterion 5: Audit Trail — Timestamped logs ✓</span>
+      <span class="criteria-pill" style="color:#fbbf24;border-color:#78350f;">Criterion 6: Usability — README + CONTRIBUTING ✓</span>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
